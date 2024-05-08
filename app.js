@@ -12,8 +12,7 @@ async function start(){
     try{
       await  mongoose.connect(config.get('mongoUrl'),{
           useNewUrlParser: true,
-          useUnifiedTopolody: true,
-          useCreateIndex: true
+          useUnifiedTopology: true,
       })
         app.listen(PORT, () => console.log(`App has been started on port ${PORT} ...`))
     } catch (e) {
