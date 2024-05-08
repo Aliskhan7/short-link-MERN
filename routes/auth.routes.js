@@ -1,10 +1,29 @@
 const {Router} = require('express')
 const User = require('../models/User')
 const bcript = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('config')
+const {check, validationResult} = require('express-validator')
 const router = Router()
 
-router.post('/register', async (req, res) =>{
+router.post(
+    '/register',
+    [
+        check('email', 'Failed email').isEmail,
+        check('password', 'minimal symbol 6')
+            .isLength({min: 6})
+    ],
+    async (req, res) =>{
     try{
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                error: errors.array(),
+                message: 'Uncorrected data for register'
+            })
+        }
+
         const {email, password} = req.body
         const candidate = await User.findOne({email})
 
@@ -22,8 +41,46 @@ router.post('/register', async (req, res) =>{
     }
 })
 
-router.post('/login', async (req, res) =>{
+router.post(
+    '/login',
+    [
+        check('email', 'Enter a valid Email').normalizeEmail().isEmail(),
+        check('password', 'Enter a password').exists()
+    ],
+    async (req, res) => {
+    try{
+        const errors = validationResult(req)
 
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                error: errors.array(),
+                message: 'Uncorrected data for login'
+            })
+        }
+
+        const {email, password} = req.body
+
+        const user = await User.findOne({email})
+        if(!user){
+            return res.status(400).json({message: 'User is not find'})
+        }
+
+        const isMatch = await bcript.compare(password, user.password)
+        if(!isMatch){
+            return res.status(400).json({message: 'User is not find, try again'})
+        }
+
+        const token = jwt.sign(
+            {userId: user.id},
+            config.get('jwtSecret'),
+            {expiresIn: '1H'}
+        )
+
+        res.json({token, userId: user.id})
+
+    }catch (e) {
+        res.status(500).json({message: 'Error, try again...('})
+    }
 })
 
 
