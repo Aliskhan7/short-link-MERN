@@ -1,5 +1,5 @@
 {
-  "port": 5000,
+  "port": 6000,
   "jwtSecret": "ag token mern",
   "mongoUrl": "mongodb+srv://aliskhangazamatov:uHxJZD3OQKLQqXuO@cluster0.atpam9r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 }
