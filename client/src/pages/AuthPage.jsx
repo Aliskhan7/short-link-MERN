@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHttp } from "../hooks/http.hook";
+import { useMessage } from "../hooks/message.hook";
 
 const AuthPage = () => {
-  const { loading, error, request, headers } = useHttp();
+  const message = useMessage();
+  const { loading, error, request, headers, cleanError } = useHttp();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    console.log(error);
+    message(error);
+    cleanError();
+  }, [error, message]);
 
   const changeHandler = (e) => {
     setForm({
@@ -18,13 +26,13 @@ const AuthPage = () => {
   const registerHandler = async () => {
     try {
       const data = request("/api/auth/register", "POST", { ...form });
+      message(data.message);
     } catch (e) {}
   };
 
   return (
     <>
       <h1>Shorting links</h1>
-
       <div className="w-full mx-auto px-6 py-4 max-w-sm rounded overflow-hidden shadow-lg">
         <div className="mx-auto">
           <div>
