@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { useMessage } from "../hooks/message.hook";
+import { AuthContext } from "../context/AuthContext";
 
 const AuthPage = () => {
+  const auth = useContext(AuthContext);
   const message = useMessage();
   const { loading, error, request, headers, cleanError } = useHttp();
   const [form, setForm] = useState({
@@ -27,6 +29,12 @@ const AuthPage = () => {
     try {
       const data = request("/api/auth/register", "POST", { ...form });
       message(data.message);
+    } catch (e) {}
+  };
+  const loginHandler = async () => {
+    try {
+      const data = request("/api/auth/login", "POST", { ...form });
+      auth.login(data.token, data.userId);
     } catch (e) {}
   };
 
@@ -67,6 +75,7 @@ const AuthPage = () => {
             <div className=" pb-2 flex gap-x-4">
               <button
                 disabled={loading}
+                onClick={loginHandler}
                 className="rounded-lg bg-blue-500 text-white py-1.5 px-3"
               >
                 Sign in
