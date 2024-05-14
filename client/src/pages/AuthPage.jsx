@@ -6,17 +6,17 @@ import { AuthContext } from "../context/AuthContext";
 const AuthPage = () => {
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const { loading, error, request, headers, cleanError } = useHttp();
+  const { loading, request, error, clearError } = useHttp();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   useEffect(() => {
-    console.log(error);
+    console.log("err", error);
     message(error);
-    cleanError();
-  }, [error, message]);
+    clearError();
+  }, [error, message, clearError]);
 
   const changeHandler = (e) => {
     setForm({
