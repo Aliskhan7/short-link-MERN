@@ -19,7 +19,7 @@ router.post(
 
         if(!errors.isEmpty()){
             return res.status(400).json({
-                error: errors.array(),
+                errors: errors.array(),
                 message: 'Uncorrected data for register'
             })
         }
@@ -35,7 +35,7 @@ router.post(
         const user = new User({email, password: hashedPassword})
         await user.save()
 
-        res.status(401).json({message: 'user created'})
+        res.status(201).json({message: 'user created'})
     }catch (e) {
         res.status(500).json({message: 'Error, try again...('})
     }
@@ -43,17 +43,17 @@ router.post(
 
 router.post(
     '/login',
-    [
-        check('email', 'Enter a valid Email').normalizeEmail().isEmail(),
-        check('password', 'Enter a password').exists()
-    ],
+  [
+      check('email', 'Введите корректный email').normalizeEmail().isEmail(),
+      check('password', 'Введите пароль').exists()
+  ],
     async (req, res) => {
     try{
         const errors = validationResult(req)
 
         if(!errors.isEmpty()){
             return res.status(400).json({
-                error: errors.array(),
+                errors: errors.array(),
                 message: 'Uncorrected data for login'
             })
         }
@@ -71,9 +71,9 @@ router.post(
         }
 
         const token = jwt.sign(
-            {userId: user.id},
-            config.get('jwtSecret'),
-            {expiresIn: '1H'}
+          { userId: user.id },
+          config.get('jwtSecret'),
+          { expiresIn: '1h' }
         )
 
         res.json({token, userId: user.id})
