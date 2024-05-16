@@ -40,7 +40,9 @@ const AuthPage = () => {
 
   return (
     <>
-      <h1>Shorting links</h1>
+      <h1 className="mx-auto text-gray-950 text-center text-4xl font-bold mb-5">
+        Shorting links
+      </h1>
       <div className="w-full mx-auto px-6 py-4 max-w-sm rounded overflow-hidden shadow-lg">
         <div className="mx-auto">
           <div>
