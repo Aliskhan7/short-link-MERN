@@ -13,27 +13,24 @@ const AuthPage = () => {
   });
 
   useEffect(() => {
-    console.log("err", error);
-    message(error);
+    // message(error);
     clearError();
   }, [error, message, clearError]);
 
-  const changeHandler = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: [e.target.value],
-    });
+  const changeHandler = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
   };
 
   const registerHandler = async () => {
     try {
-      const data = request("/api/auth/register", "POST", { ...form });
+      const data = await request("/api/auth/register", "POST", { ...form });
       message(data.message);
     } catch (e) {}
   };
+
   const loginHandler = async () => {
     try {
-      const data = request("/api/auth/login", "POST", { ...form });
+      const data = await request("/api/auth/login", "POST", { ...form });
       auth.login(data.token, data.userId);
     } catch (e) {}
   };
@@ -54,9 +51,11 @@ const AuthPage = () => {
                 <div className="mb-5">
                   <label htmlFor="email"></label>
                   <input
-                    type="email"
-                    placeholder="Enter email"
+                    id="email"
+                    type="text"
                     name="email"
+                    placeholder="Enter email"
+                    value={form.email}
                     onChange={changeHandler}
                     className=" border-b border-b-blue-500 py-2 w-full focus:outline-none"
                   />
@@ -65,9 +64,11 @@ const AuthPage = () => {
                 <div>
                   <label htmlFor="password"></label>
                   <input
+                    id="password"
                     type="password"
-                    placeholder="Enter password"
                     name="password"
+                    placeholder="Enter password"
+                    value={form.password}
                     onChange={changeHandler}
                     className=" border-b border-b-blue-500 py-2 w-full focus:outline-none"
                   />
@@ -85,7 +86,7 @@ const AuthPage = () => {
               <button
                 disabled={loading}
                 onClick={registerHandler}
-                className="rounded-lg bg-blue-300 text-white py-1.5 px-3"
+                className="rounded-lg bg-blue-500 text-white py-1.5 px-3"
               >
                 Registration
               </button>
