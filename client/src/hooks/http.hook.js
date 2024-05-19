@@ -24,6 +24,7 @@ export const useHttp = () => {
 
         return data;
       } catch (e) {
+        console.log("rererer", e.message);
         setLoading(false);
         setError(e.message);
         throw e;
