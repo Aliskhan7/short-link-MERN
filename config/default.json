@@ -1,5 +1,6 @@
 {
   "port": 6000,
   "jwtSecret": "ag token mern",
-  "mongoUri": "mongodb+srv://aliskhangazamatov:uHxJZD3OQKLQqXuO@cluster0.atpam9r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  "mongoUri": "mongodb+srv://aliskhangazamatov:uHxJZD3OQKLQqXuO@cluster0.atpam9r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+  "baseURL": "http://localhost:6000"
 }
